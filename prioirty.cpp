@@ -9,7 +9,7 @@ typedef struct scheduler{
     int cur_bt=0;   //현재 프로세스 bt기억
 	int bt;         /*bt=bursttime*/
 	int wt = 0;     /*wt=waitingtime*/
-	int tt;         /*tt=turnaround time*/
+	int tat;         /*tt=turnaround time*/
 	int priority;
 }   scheduler;
 
@@ -63,6 +63,9 @@ int main(){
     }
     for(int d=0;d<process_numb;d++) {
         avg_wt += rtq[d].wt;
+    }
+    for(int y=0;y<process_numb;y++){
+        rtq[y].tat = rtq[y].bt + rtq[y].wt;
     }
     avg_wt = avg_wt / float(process_numb);
     for(int e = 0 ; e < process_numb ; e++) {

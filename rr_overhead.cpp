@@ -10,7 +10,7 @@ typedef struct scheduler{
     int cur_bt=0;   //현재 프로세스 bt기억
 	int bt;         /*bt=bursttime*/
 	int wt = 0;     /*wt=waitingtime*/
-	int tt;         /*tt=turnaround time*/
+	int tat;         /*tt=turnaround time=wt+bt*/
 	int priority;
     int rr = 0;
     }   scheduler;
@@ -82,11 +82,15 @@ int main(){
     }
     avg_wt = avg_wt / float(process_numb);
 	float(cputime)=overhead*0.1;
+    for(int y=0;y<process_numb;y++){
+        rtq[y].tat = rtq[y].bt + rtq[y].wt;
+    }
     for(int e = 0 ; e < process_numb ; e++) {
 	    cout << rtq[e].process_id << '\t' \
-             << rtq[e].at << '\t' \
-             << rtq[e].bt << '\t' \
-             << rtq[e].wt << endl;
+             << rtq[e].at  << '\t' \
+             << rtq[e].bt  << '\t' \
+             << rtq[e].wt  << '\t' \
+             << rtq[e].tat << endl;
     }
     cout << avg_wt << endl;
     cout << cputime - 1 << endl;
