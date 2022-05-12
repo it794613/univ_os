@@ -25,8 +25,8 @@ bool compare2(scheduler h,scheduler k) {
 
 int main(){
     int cputime = 0;
-    int timecheck = 0;
     int rrtime;
+	int overhead=0;
     scheduler process[10];      //job queue
     vector<scheduler> rq(0);    //ready queue
     vector<scheduler> rtq(0);   //result queue
@@ -57,12 +57,14 @@ int main(){
             rtq.push_back(rq[0]);
             rq.erase(rq.begin());
             cur_rr = 0; 
+			overhead++;
         } else {
             if(cur_rr == rrtime){
                 cur_rr = 0;
                 temp = rq[0];
                 rq.push_back(temp);
                 rq.erase(rq.begin());
+				overhead++;
             }
         }
         rq[0].cur_bt--;
@@ -70,6 +72,8 @@ int main(){
         for(int c = 1 ; c < rq.size() ; c++) {
             rq[c].wt++;
         }
+
+        cout << "cur : " << cur_rr << "[" << rq[0].process_id << ": " << rq[0].cur_bt << ", " << "rq : " << rq.size() << "]" << endl;
         cur_rr++;
         cputime++;
     }
@@ -77,6 +81,7 @@ int main(){
         avg_wt += rtq[d].wt;
     }
     avg_wt = avg_wt / float(process_numb);
+	float(cputime)=overhead*0.1;
     for(int e = 0 ; e < process_numb ; e++) {
 	    cout << rtq[e].process_id << '\t' \
              << rtq[e].at << '\t' \

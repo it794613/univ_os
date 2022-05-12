@@ -1,7 +1,6 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <unistd.h>
 using namespace std;
 
 typedef struct scheduler{
@@ -11,9 +10,7 @@ typedef struct scheduler{
 	int bt;         /*bt=bursttime*/
 	int wt = 0;     /*wt=waitingtime*/
 	int tt;         /*tt=turnaround time*/
-	int priority;
-    int rr = 0;
-    }   scheduler;
+}   scheduler;
 
 bool compare(scheduler a, scheduler b) {
     return a.at < b.at;
@@ -25,19 +22,14 @@ bool compare2(scheduler h,scheduler k) {
 
 int main(){
     int cputime = 0;
-    int timecheck = 0;
-    int rrtime;
     scheduler process[10];      //job queue
     vector<scheduler> rq(0);    //ready queue
     vector<scheduler> rtq(0);   //result queue
-    scheduler temp;
     int process_numb;
     int cur_pro = 0;
     float avg_wt = 0;
 	cout << "process number : ";
 	cin >> process_numb;
-    cout << "enter : rrtime : ";
-    cin >> rrtime;
 	cout << "enter : id, arrivetime, bursttime : ";
 
     for(int a=0;a<process_numb;a++) {
@@ -46,31 +38,25 @@ int main(){
         cin >> process[a].bt;
         process[a].cur_bt=process[a].bt;
     }
-    int cur_rr = 0; 
+
     while(rtq.size() != process_numb){
         for(int b = 0 ; b < process_numb ; b++) {
             if(process[b].at == cputime) {
                 rq.push_back(process[b]);
             }
         }
+        sort(rq.begin(),rq.end(),compare2); // 이거 계속 해주면 preemptive;
+
         if(rq[0].cur_bt == 0) {
             rtq.push_back(rq[0]);
             rq.erase(rq.begin());
-            cur_rr = 0; 
-        } else {
-            if(cur_rr == rrtime){
-                cur_rr = 0;
-                temp = rq[0];
-                rq.push_back(temp);
-                rq.erase(rq.begin());
-            }
-        }
+        } 
         rq[0].cur_bt--;
-        
+
         for(int c = 1 ; c < rq.size() ; c++) {
             rq[c].wt++;
         }
-        cur_rr++;
+
         cputime++;
     }
     for(int d=0;d<process_numb;d++) {
