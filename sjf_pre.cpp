@@ -70,7 +70,8 @@ int main(){
 	    cout << rtq[e].process_id << '\t' \
              << rtq[e].at << '\t' \
              << rtq[e].bt << '\t' \
-             << rtq[e].wt << endl;
+             << rtq[e].wt  << '\t' \
+             << rtq[e].tat << endl;
     }
     cout << avg_wt << endl;
     cout << cputime - 1 << endl;

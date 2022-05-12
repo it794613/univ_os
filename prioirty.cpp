@@ -70,9 +70,10 @@ int main(){
     avg_wt = avg_wt / float(process_numb);
     for(int e = 0 ; e < process_numb ; e++) {
 	    cout << rtq[e].process_id << '\t' \
-             << rtq[e].at << '\t' \
-             << rtq[e].bt << '\t' \
-             << rtq[e].wt << endl;
+             << rtq[e].at  << '\t' \
+             << rtq[e].bt  << '\t' \
+             << rtq[e].wt  << '\t' \
+             << rtq[e].tat << endl;
     }
     cout << avg_wt << endl;
     cout << cputime - 1 << endl;
