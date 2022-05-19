@@ -13,6 +13,7 @@ typedef struct scheduler{
 	int tat;         /*tt=turnaround time=wt+bt*/
 	int priority;
     int rr = 0;
+    int response;   //response time=cur_cuptime-at
     }   scheduler;
 
 bool compare(scheduler a, scheduler b) {
@@ -24,7 +25,7 @@ bool compare2(scheduler h,scheduler k) {
 }
 
 int main(){
-    int cputime = 0;
+    float cputime = 0;
     int rrtime;
 	int overhead=0;
     scheduler process[10];      //job queue
@@ -34,6 +35,8 @@ int main(){
     int process_numb;
     int cur_pro = 0;
     float avg_wt = 0;
+    float avg_rp = 0;
+
 	cout << "process number : ";
 	cin >> process_numb;
     cout << "enter : rrtime : ";
@@ -54,6 +57,7 @@ int main(){
             }
         }
         if(rq[0].cur_bt == 0) {
+            rq[0].response=cputime-rq[0].at;
             rtq.push_back(rq[0]);
             rq.erase(rq.begin());
             cur_rr = 0; 
@@ -77,21 +81,27 @@ int main(){
         cur_rr++;
         cputime++;
     }
-    for(int d=0;d<process_numb;d++) {
-        avg_wt += rtq[d].wt;
-    }
-    avg_wt = avg_wt / float(process_numb);
-	float(cputime)=overhead*0.1;
-    for(int y=0;y<process_numb;y++){
+        for(int y=0;y<process_numb;y++){
         rtq[y].tat = rtq[y].bt + rtq[y].wt;
     }
+	cputime=cputime+overhead*0.1;  //overhead 시간을 0.1초로 생각한다.
+    for(int d=0;d<process_numb;d++) {
+        avg_wt += rtq[d].wt;
+        avg_rp += rtq[d].response;
+        
+    }
+    avg_rp = avg_rp / float(process_numb);
+    avg_wt = avg_wt / float(process_numb);
+    cout << "id" << "\t" << "at" << "\t" << "bt" << "\t" << "wt" << "\t" << "response" << "\t" << "tat" << endl;
     for(int e = 0 ; e < process_numb ; e++) {
 	    cout << rtq[e].process_id << '\t' \
-             << rtq[e].at  << '\t' \
-             << rtq[e].bt  << '\t' \
-             << rtq[e].wt  << '\t' \
-             << rtq[e].tat << endl;
+             << rtq[e].at         << '\t' \
+             << rtq[e].bt         << '\t' \
+             << rtq[e].wt         << '\t' \
+             << rtq[e].response   << '\t' \
+             << "\t" << rtq[e].tat<< endl;
     }
-    cout << avg_wt << endl;
-    cout << cputime - 1 << endl;
+    cout << "average wating time : " << avg_wt << endl;
+    cout << "average response time : " << avg_rp << endl;
+    cout << "cputime : " << cputime - 1 << endl;
 }

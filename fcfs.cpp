@@ -9,9 +9,8 @@ typedef struct scheduler{
     int cur_bt=0;   //현재 프로세스 bt기억
 	int bt;         /*bt=bursttime*/
 	int wt = 0;     /*wt=waitingtime*/
-	int tt;         /*tt=turnaround time*/
-	int priority;
-    bool run=false;
+	int tat;        /*tt=turnaround time*/
+    int response;   //response time=cur_cuptime-at
 }   scheduler;
 
 bool compare(scheduler a, scheduler b) {
@@ -33,6 +32,7 @@ int main(){
     int process_numb;
     int cur_pro = 0;
     float avg_wt = 0;
+    float avg_rp = 0;
 	cout << "process number : ";
 	cin >> process_numb;
 	cout << "enter : id, arrivetime, bursttime : ";
@@ -51,6 +51,7 @@ int main(){
             }
         }
         if(rq[0].cur_bt == 0) {
+            rq[0].response = cputime - rq[0].at;
             rtq.push_back(rq[0]);
             rq.erase(rq.begin());
         } 
@@ -62,16 +63,26 @@ int main(){
         }
         cputime++;
     }
-    for(int d=0;d<process_numb;d++) {
-        avg_wt += rtq[d].wt;
+        for(int y=0;y<process_numb;y++){
+        rtq[y].tat = rtq[y].bt + rtq[y].wt;
     }
+        for(int d=0;d<process_numb;d++) {
+        avg_wt += rtq[d].wt;
+        avg_rp += rtq[d].response;
+        
+    }
+    avg_rp = avg_rp / float(process_numb);
     avg_wt = avg_wt / float(process_numb);
+    cout << "id" << "\t" << "at" << "\t" << "bt" << "\t" << "wt" << "\t" << "response" << "\t" << "tat" << endl;
     for(int e = 0 ; e < process_numb ; e++) {
 	    cout << rtq[e].process_id << '\t' \
-             << rtq[e].at << '\t' \
-             << rtq[e].bt << '\t' \
-             << rtq[e].wt << endl;
+             << rtq[e].at         << '\t' \
+             << rtq[e].bt         << '\t' \
+             << rtq[e].wt         << '\t' \
+             << rtq[e].response   << '\t' \
+             << "\t" << rtq[e].tat<< endl;
     }
-    cout << avg_wt << endl;
-    cout << cputime - 1 << endl;
+    cout << "average wating time : " << avg_wt << endl;
+    cout << "average response time : " << avg_rp << endl;
+    cout << "cputime : " << cputime - 1 << endl;
 }
