@@ -48,7 +48,7 @@ int main(){
             }
         }
         sort(rq.begin(),rq.end(),compare2); // 이거 계속 해주면 preemptive;
-
+        cout << rq[0].process_id;
         if(rq[0].cur_bt == 0) {
             rq[0].response=cputime-rq[0].at;
             rtq.push_back(rq[0]);
@@ -70,6 +70,7 @@ int main(){
         avg_rp += rtq[d].response;
         
     }
+    cout << endl;
     avg_rp = avg_rp / float(process_numb);
     avg_wt = avg_wt / float(process_numb);
     cout << "id" << "\t" << "at" << "\t" << "bt" << "\t" << "wt" << "\t" << "response" << "\t" << "tat" << endl;
